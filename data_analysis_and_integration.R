@@ -10,6 +10,7 @@ save(grset,file="grset.rda")
 ##then to load later
 load("grset.rda")
 
+#-----HW08
 #-----Q1:
 #specify path to TCGA data:
 path="/home/anna/anna/study/DNA_methylation/tcgaMethylationSubset-master"
@@ -86,8 +87,22 @@ granges(dat["cg22365276",])
 granges(dat[names(which.max(fit$coefficients[,2])),])
 
 
+#Q4: use the qvalue function to determine the q-value for the CpG found in the previous question.
 
+library(qvalue)
+##create design matrix
+tissue = as.factor(pData(dat)$Tissue)
+X = model.matrix(~tissue)
+##extract methylation values
+y = getBeta(dat)
+## obtain effect sizes and pvals with limma
+fit = lmFit(y,X)
+eb = ebayes(fit)
+## obtain q-values
+qvals = qvalue(eb$p.value[,2])$qvalue
 
-
+#Q: What is the q-value for this CpG?
+qvals[360649]
+#A => 1.269936e-27 
 
 
