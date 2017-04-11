@@ -10,7 +10,7 @@ save(grset,file="grset.rda")
 ##then to load later
 load("grset.rda")
 
-#Q1:
+#-----Q1:
 #specify path to TCGA data:
 path="/home/anna/anna/study/DNA_methylation/tcgaMethylationSubset-master"
 targets=read.delim(file.path (path,"targets.txt"),as.is=TRUE)
@@ -20,3 +20,7 @@ dim(targets)
 # A1 = 98
 
 
+#-----Q2:
+#How many samples are from normal colon samples?
+length(which(targets$Tissue == 'colon' & targets$Status == 'normal'))
+# A2 = 17
