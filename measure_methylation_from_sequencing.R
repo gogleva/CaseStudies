@@ -13,7 +13,10 @@ length(res)
 
 # A = 58102
 
-#----Q2: 
+#----Q2: Plot a histogram of the DNA fragment sizes after we cut with CCGG. How would you describe this distribution?
 
 size=diff(start(res))
+hist(size)
 hist(log10(size))
+
+#A : The distribution has a long right tail with most values from 0-1000, but some very large values.
