@@ -106,3 +106,24 @@ qvals[360649]
 #A => 1.269936e-27 
 
 
+#Q5: 
+#use the location of the CpG discussed in the previous two questions. 
+#Find all the CpGs within 5000 basepairs of the location of this CpG. 
+
+i <- 360649
+gr <- granges(dat)
+middle <- gr[i, ]
+Index <- gr%over%(middle + 5000)
+cols <- ifelse(pData(dat)$Tissue == 'breast', 'red', 'green')
+chr <- as.factor(seqnames(gr))
+pos <- start(gr)
+
+#Create a plot showing the methylation values for all samples for these CpGs.
+#Use color to distinguish breast from colon
+#methylation values are stored in y
+matplot(pos[Index],y[Index,],col=cols,pch=1,xlab="genomic location",ylab="methylation")
+legend("bottomright", inset=.05, legend=c("breast", "colon"), pch=1, col=c("red", "green"), horiz=TRUE)
+
+#Plot the estimated effect size and the -log10 of the q-value in two separate plots for a total of three plots.
+
+
