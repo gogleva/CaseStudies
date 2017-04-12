@@ -150,5 +150,39 @@ for (i in o) {
 
 # => A: For most plots we see groups of CpGs that are differentially methylated.
 
+#-----Q7: 
+
+# explicitly search for regions using the bumphunter function.
+#We will use permutation to assess statistical significance.
+#Because the function is slow, we will restrict our analysis to chromosome 15.
+
+index= which(seqnames(dat)=="chr15")
+dat2 = dat[index,]
+
+library(doParallel)
+ncores = detectCores()
+registerDoParallel(cores = ncores)
+
+#We can now run the bumphunter function to find differentially methylated regions (DMR). 
+#we will use 100 permutations, although we recommend more in practice. 
+#Here we will use a cutoff of 0.1. 
+#The permutations are random so make sure you set seed to 1 to obtain exact results in the assessment question.
+
+##create design matrix
+tissue = as.factor(pData(dat)$Tissue)
+X = model.matrix(~tissue)
+##extract methylation values
+set.seed(1)
+res = bumphunter(dat2,X,cutoff=0.1,B=100)
+head(res$tab)
+
+#Q:  how many regions achieve an FWER lower than 0.05?
+
+length(which(res$tab[12] < 0.05))
+# A => 296
 
 
+
+#-----Q8:
+
+#Previously we performed a CpG by CpG analysis and obtained qvalues. Create an index for the CpGs that achieve qvalues smaller than 0.05 and a large effect size larger than 0.5 (in absolute value):
