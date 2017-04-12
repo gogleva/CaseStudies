@@ -129,3 +129,26 @@ legend("bottomright", inset=.05, legend=c("breast", "colon"), pch=1, col=c("red"
 splot(fit$coef[,2],-log10(eb$p.value[,2]),xlab="Effect size",ylab="-log10 p-value")
 plot(pos[Index],fit$coef[Index,2],type="b",xlab="genomic location",ylab="difference")
 
+# => A: A region of about 1000 base pairs appears to be different.
+
+
+#-----Q6. Repeat the above exercise, but now make the same plots for the top 10 CpGs ranked by absolute value of effect size. 
+#get the order like this:
+o = order(abs(fit$coef[,2]), decreasing = TRUE)[1:10]
+
+par(mfrow = c(2,5))
+
+for (i in o) {
+  middle <- gr[i, ]
+  Index <- gr%over%(middle + 5000)
+  cols <- ifelse(pData(dat)$Tissue == 'breast', 'red', 'green')
+  chr <- as.factor(seqnames(gr))
+  pos <- start(gr)
+  matplot(pos[Index], y[Index,], col=cols, pch=16, xlab="genomic location", ylab="methylation")
+#  legend("bottomright", inset=.05, legend=c("breast", "colon"), pch=1, col=c("red", "green"), horiz=TRUE)
+}
+
+# => A: For most plots we see groups of CpGs that are differentially methylated.
+
+
+
