@@ -41,3 +41,14 @@ head(res$table)
 #Q: What proportion of the blocks reported in res$table are hypomethyated (lower methylation in cancer versus normal)?
 hypo <- length(which(res$table$value < 0))/nrow(res$table)
 
+#OR:
+mean(res$table$value<0)
+
+
+tab=makeGRangesFromDataFrame(res$table)
+index= granges(cdat$obj)%over% (tab[1]+10000)
+pos=start(cdat$obj)[index]
+col=as.numeric(status)
+matplot(pos,getBeta(cdat$obj)[index,],col=col,pch=1,cex=0.5)
+##and these are the estimated difference
+plot(pos,res$fitted[index])
