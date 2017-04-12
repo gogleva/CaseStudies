@@ -126,5 +126,6 @@ matplot(pos[Index], y[Index,], col=cols, pch=16, xlab="genomic location", ylab="
 legend("bottomright", inset=.05, legend=c("breast", "colon"), pch=1, col=c("red", "green"), horiz=TRUE)
 
 #Plot the estimated effect size and the -log10 of the q-value in two separate plots for a total of three plots.
-
+splot(fit$coef[,2],-log10(eb$p.value[,2]),xlab="Effect size",ylab="-log10 p-value")
+plot(pos[Index],fit$coef[Index,2],type="b",xlab="genomic location",ylab="difference")
 
