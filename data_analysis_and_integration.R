@@ -254,9 +254,8 @@ X = model.matrix(~tissue)
 res = bumphunter(dat,X,cutoff=0.25)
 nrow(res$tab)
 
-#probably not relted
-cl=clusterMaker(chr,pos,maxGap=500)
-table(table(cl)) ##shows the number of regions with 1,2,3, ... points in them
+# Q: What proportion of regions are just one CpG?
+length(which(res$tab$L == 1)) / nrow(res$tab)
 
-
+# => A = 0.833483
 
