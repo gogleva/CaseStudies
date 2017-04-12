@@ -185,4 +185,20 @@ length(which(res$tab[12] < 0.05))
 
 #-----Q8:
 
-#Previously we performed a CpG by CpG analysis and obtained qvalues. Create an index for the CpGs that achieve qvalues smaller than 0.05 and a large effect size larger than 0.5 (in absolute value):
+#Previously we performed a CpG by CpG analysis and obtained qvalues.
+#Create an index for the CpGs that achieve qvalues smaller than 0.05 and a large effect size larger than 0.5 (in absolute value):
+
+##fit and qvals were defined in a previous answer
+index = which(qvals < 0.05 & abs(fit$coef[,2]) > 0.5 & seqnames(dat)=="chr15")
+
+#create a table of the DMRs returned by bumphunter that had 3 or more probes and convert the table into GRanges:
+tab = res$tab[ res$tab$L >= 3,]
+tab = makeGRangesFromDataFrame(tab)
+
+#Q: What proportion of the CpGs indexed by index are inside regions found in tab
+Ind <- gr[index, ]
+findOverlaps(Ind, tab)
+# => 12 hits
+A = 12/length(index)
+
+# => A = 0.5714286
