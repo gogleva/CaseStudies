@@ -17,7 +17,15 @@ dat = mapToGenome(dat)
 cdat = cpgCollapse(dat)
 nrow(dat)
 
-#Q: How many regions are represented in the collapsed object?
+#-----Q1: How many regions are represented in the collapsed object?
 nrow(cdat$object)
 
 # A = 223497
+
+#-----Q2: What proportion of the regions are OpenSea regions?
+
+OpenSeq_ratio <- length(which(granges(cdat$obj)$type == 'OpenSea'))/length(granges(cdat$obj)$type)
+
+
+
+
