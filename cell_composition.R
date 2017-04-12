@@ -59,3 +59,5 @@ legend('topright', col= c('red', 'green'), legend= c("old", "young"), pch = 16, 
 legend('bottomleft', pch = c(6,8,19), legend = c('normal', 'crohn', 'ulcer'))
 
 # A: The individuals that are older than 40 form a cluster, with the rest showing larger variability.
+
+
