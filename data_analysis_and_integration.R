@@ -202,3 +202,30 @@ findOverlaps(Ind, tab)
 A = 12/length(index)
 
 # => A = 0.5714286
+
+
+#-----Q9:
+#download the table of CGI using AnnotationHub:
+library(AnnotationHub)
+cgi = AnnotationHub()[["AH5086"]]
+
+# create a GRanges object from the list of DMRs we computed in the previous questions:
+
+tab = res$tab[res$tab$fwer <= 0.05,]
+tab = makeGRangesFromDataFrame(tab)
+
+
+# Q: What proportion of the regions represented in tab do not overlap islands, 
+# but overall CpG islands shores (within 2000 basepairs)?
+# Hint: use the distanceToNearest
+
+overlap_islands <-findOverlaps(tab, cgi)
+map = distanceToNearest(tab,cgi)
+d = mcols(map)$dist
+tab_shore_and_island <- ind_2000 <- which(d <= 2000)
+
+A = (length(tab_shore_and_island) - length(overlap_islands))/length(tab)
+
+# => A = 0.1892744
+
+
