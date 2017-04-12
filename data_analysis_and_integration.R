@@ -259,3 +259,63 @@ length(which(res$tab$L == 1)) / nrow(res$tab)
 
 # => A = 0.833483
 
+
+#Q11: 
+
+#match these regions to genes.
+#First load the expression related data. 
+#this will load an object called tcgaLungColonExpLM which is the result of a differential expression analysis using limma on TCGA rawdata:
+
+path="/home/anna/anna/study/DNA_methylation/tcgaMethylationSubset-master"
+load(file.path(path,"tcgaLungColonExpLM.rda"))
+class(tcgaLungColonExpLM)
+
+# we saved the annotation of the gene expression array in this object:
+print(annotation)
+
+# obtain q-values using the qvalue package:
+
+library(limma)
+library(qvalue)
+eb=ebayes(tcgaLungColonExpLM)
+qvals=qvalue(eb$p.value[,2])$qvalue
+
+# obtain locations for these genes. 
+
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+biocLite("hgu133plus2.db")
+library("hgu133plus2.db")
+
+map=select(hgu133plus2.db,keys=rownames(tcgaLungColonExpLM$coef),columns=c("ENTREZID"),keytype="PROBEID")
+biocLite("Homo.sapiens")
+library(Homo.sapiens)
+
+Genes=genes(Homo.sapiens)
+Genes=resize(Genes,1) ## we want the tss
+
+index1=match(as.character(mcols(Genes)$GENEID),map$ENTREZID)
+index2 = match(map$PROBEID[index1],rownames(tcgaLungColonExpLM$coef))
+M = tcgaLungColonExpLM$coef[index2,2]
+
+#M is now in the same order as Genes. We can now find the closest gene to each DMR.
+
+tab = makeGRangesFromDataFrame(res$tab,keep.extra.columns = TRUE)
+map2=distanceToNearest(tab,Genes)
+
+# make plots comparing the methylation differences to the gene expression differences.
+# We consider DMRs of different size
+
+index1=subjectHits(map2)
+dist = mcols(map2)$dist
+
+library(rafalib)
+mypar(2,2)
+for(i in c(0,1,2,3)){
+  keep = dist< 10000 & tab$L>i
+  plot(tab$value[keep],M[index1][keep],main=paste("cor=",signif(cor(tab$value[keep],M[index1][keep],use="complete"),2)))
+}
+
+# A: There is a negative correlation between gene expression and DNA methylation and it is stronger for larger DMRs
+
+
