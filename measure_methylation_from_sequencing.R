@@ -30,3 +30,13 @@ length(both)/length(size)
 
 #A: 0.3309754
 
+#-----Q4: If we sequence all of chromosome 22 we need to sequence 51,304,566 bases. However, if instead we focus only on fragments of size between 40 and 220 basepairs, how much sequence would we need?
+
+target_sizes <- up[both]
+res =  sum(target_sizes)
+
+# => A = 2203342
+
+
+
+
