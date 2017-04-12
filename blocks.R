@@ -27,5 +27,17 @@ nrow(cdat$object)
 OpenSeq_ratio <- length(which(granges(cdat$obj)$type == 'OpenSea'))/length(granges(cdat$obj)$type)
 
 
+#-----Q3: blockfinder to find differentially methylated regions between cancer and normal:
 
+status = factor(pData(cdat$obj)$Status,
+                level=c("normal","cancer"))
+X=model.matrix(~status)
+res = blockFinder(cdat$obj,X,cutoff=0.05)
+
+#blockFinder calls bumphunter and returns a similar object. We can see the blocks:
+
+head(res$table)
+
+#Q: What proportion of the blocks reported in res$table are hypomethyated (lower methylation in cancer versus normal)?
+hypo <- length(which(res$table$value < 0))/nrow(res$table)
 
