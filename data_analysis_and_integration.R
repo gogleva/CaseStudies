@@ -121,7 +121,8 @@ pos <- start(gr)
 #Create a plot showing the methylation values for all samples for these CpGs.
 #Use color to distinguish breast from colon
 #methylation values are stored in y
-matplot(pos[Index],y[Index,],col=cols,pch=1,xlab="genomic location",ylab="methylation")
+
+matplot(pos[Index], y[Index,], col=cols, pch=16, xlab="genomic location", ylab="methylation")
 legend("bottomright", inset=.05, legend=c("breast", "colon"), pch=1, col=c("red", "green"), horiz=TRUE)
 
 #Plot the estimated effect size and the -log10 of the q-value in two separate plots for a total of three plots.
