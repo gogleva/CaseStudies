@@ -20,3 +20,13 @@ hist(size)
 hist(log10(size))
 
 #A : The distribution has a long right tail with most values from 0-1000, but some very large values.
+
+#-----Q3: What proportion of the fragments created for chr22 are between 40 and 220 basepairs?
+
+up <- size[which(size <= 220)]
+both <- which(up >= 40)
+
+length(both)/length(size)
+
+#A: 0.3309754
+
