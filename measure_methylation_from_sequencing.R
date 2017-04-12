@@ -28,14 +28,57 @@ both <- which(up >= 40)
 
 length(both)/length(size)
 
-#A: 0.3309754
+#=> A = 0.3309754
 
 #-----Q4: If we sequence all of chromosome 22 we need to sequence 51,304,566 bases. However, if instead we focus only on fragments of size between 40 and 220 basepairs, how much sequence would we need?
 
 target_sizes <- up[both]
 res =  sum(target_sizes)
 
+# a bit more elegant:
+
+sum( size[size<=220 & size>=40] )
+
 # => A = 2203342
+
+#-----Q5: 
+
+path = "/home/anna/anna/study/DNA_methylation/colonCancerWGBS-master"
+targets = read.table(file.path(path,"targets.txt"), header = TRUE, sep = "\t")
+targets
+
+biocLite("bsseq")
+library("bsseq")
+cov.files = list.files(path=path,pattern="*chr22.cov",full.names=TRUE)  # coverage files
+colonCancerWGBS =read.bismark(files=cov.files, rmZeroCov=TRUE, sampleNames = as.character(targets$Run), strandCollapse = FALSE)
+# add sample information to object
+colData(colonCancerWGBS) = DataFrame(targets)
+###Note you might see a warning message here. You can ignore.
+
+#To view the bsseq object and the phenotypic information about each sample:
+
+colonCancerWGBS
+# phenotypic information
+pData(colonCancerWGBS)
+# granges object
+granges(colonCancerWGBS)
+
+
+#Now we can extract the coverage and the number of reads with evidence from methylation:
+
+cov=getCoverage(colonCancerWGBS,type = "Cov")
+m=getCoverage(colonCancerWGBS,type = "M")
+
+filter <- apply(cov, 1, function(x) length(x[x != 0])>= 6)
+some_coverage <- cov[filter,]
+
+#Q: What proportion of the reported CpGs have some coverage in all sample?
+
+dim(some_coverage)[1]/nrow(m)
+
+# A = 0.7743644
+
+
 
 
 
