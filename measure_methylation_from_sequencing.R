@@ -78,6 +78,18 @@ dim(some_coverage)[1]/nrow(m)
 
 # A = 0.7743644
 
+#-----Q6: Compute the total coverage (across all samples) for each CpG. Plot it against location.
+
+#total coverage:
+
+tot_cov <- rowSums(cov)
+pos <- start(granges(colonCancerWGBS))
+
+plot(pos, tot_cov)
+
+# => A: Has some very large values (>200) as well as general varaibility
+
+
 
 
 
