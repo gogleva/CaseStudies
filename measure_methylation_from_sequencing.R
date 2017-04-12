@@ -90,8 +90,21 @@ plot(pos, tot_cov)
 # => A: Has some very large values (>200) as well as general varaibility
 
 
+#-----Q7
+#we can get coverage and the number of reads including evidence for methylation like this:
+cov=getCoverage(colonCancerWGBS,type = "Cov")
+m=getCoverage(colonCancerWGBS,type = "M")
 
-
+#make plot of a selected region:
+gr = GRanges(seqnames="22",ranges=IRanges(start=43793678,end= 45022550))
+index=granges(colonCancerWGBS)%over%gr
+library(rafalib)
+i=1
+index2=which(index & cov[,i]>=5 & cov[,i]<=50)
+x=start(colonCancerWGBS)[index2]
+y=m[index2,i]/cov[index2,i]
+w=sqrt(cov[index2,i])/7
+plot(x,y,cex=w)
 
 
 
