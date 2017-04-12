@@ -228,4 +228,34 @@ A = (length(tab_shore_and_island) - length(overlap_islands))/length(tab)
 
 # => A = 0.1892744
 
+#-----Q10
+#study the relationship between gene expression and DNA methylation by integrating gene expression and DNA methylation high throughput data
+#compare colon and lung samples
+
+path="/home/anna/anna/study/DNA_methylation/tcgaMethylationSubset-master"
+targets=read.delim(file.path (path,"targets.txt"),as.is=TRUE)
+index = which( targets$Status=="normal" & targets$Tissue%in%c("colon","lung") )
+targets = targets[index,]
+
+#read in the data (this will take about 2 minutes):
+
+library(minfi)
+dat = read.metharray.exp(base=path,targets = targets, verbose=TRUE)
+
+## preprocess the data
+dat = preprocessIllumina(dat)
+dat = mapToGenome(dat)
+dat = ratioConvert(dat,type="Illumina")
+
+# run the bumphunter function with cutoff=0.25 and default parameters.
+
+tissue=pData(dat)$Tissue
+X = model.matrix(~tissue)
+res = bumphunter(dat,X,cutoff=0.25)
+nrow(res$tab)
+
+cl=clusterMaker(chr,pos,maxGap=500)
+table(table(cl)) ##shows the number of regions with 1,2,3, ... points in them
+
+
 
